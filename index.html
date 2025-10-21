@@ -50,8 +50,8 @@ nav a {
   text-decoration: none;
   font-weight: 500;
   transition: color 0.3s;
-  padding: 8px 15px;        /* slightly bigger padding for curved corners */
-  border-radius: 12px;      /* curved corners for the button */
+  padding: 8px 15px;      /* button padding */
+  border-radius: 8px;     /* slightly curved button corners */
   z-index: 0;
 }
 
@@ -59,6 +59,7 @@ nav a:hover {
   color: #00aaff;
 }
 
+/* Wave outline */
 nav a::before {
   content: '';
   position: absolute;
@@ -66,7 +67,7 @@ nav a::before {
   left: -4px;
   width: calc(100% + 8px);
   height: calc(100% + 8px);
-  border-radius: 16px;       /* slightly larger than button for smooth outline */
+  border-radius: 10px;     /* curved square corners for outline */
   box-sizing: border-box;
   border: 2px solid transparent;
   border-image: linear-gradient(90deg, #00aaff, #00ffaa, #00aaff) 1;
@@ -87,7 +88,6 @@ nav a:hover::before {
   50% { border-image-source: linear-gradient(90deg, #00ffaa, #00aaff, #00ffaa); }
   100% { border-image-source: linear-gradient(90deg, #00aaff, #00ffaa, #00aaff); }
 }
-
 
     main {
       height: 100vh;
