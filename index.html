@@ -34,13 +34,47 @@
     }
     header h1:hover { color: #00aaff; }
     nav a {
-      color: #fff;
-      margin-left: 25px;
-      text-decoration: none;
-      font-weight: 500;
-      transition: color 0.3s;
-    }
-    nav a:hover { color: #00aaff; }
+  position: relative;
+  color: #fff;
+  margin-left: 25px;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.3s;
+  padding: 5px 10px;
+}
+
+nav a:hover {
+  color: #00aaff;
+}
+
+/* Wave outline effect */
+nav a::before {
+  content: '';
+  position: absolute;
+  top: -4px;
+  left: -4px;
+  width: calc(100% + 8px);
+  height: calc(100% + 8px);
+  border-radius: 5px;
+  box-sizing: border-box;
+  border: 2px solid transparent;
+  background: linear-gradient(90deg, #00aaff, #00ffaa, #00aaff);
+  background-size: 200% 200%;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s;
+  animation: wave 1.5s linear infinite;
+}
+
+nav a:hover::before {
+  opacity: 1;
+}
+
+@keyframes wave {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
 
     main {
       height: 100vh;
