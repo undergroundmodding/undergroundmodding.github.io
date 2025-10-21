@@ -43,6 +43,18 @@
   z-index: 0;
 }
 
+nav a {
+  position: relative;
+  color: #fff;
+  margin-left: 25px;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.3s;
+  padding: 8px 15px;        /* slightly bigger padding for curved corners */
+  border-radius: 12px;      /* curved corners for the button */
+  z-index: 0;
+}
+
 nav a:hover {
   color: #00aaff;
 }
@@ -54,15 +66,15 @@ nav a::before {
   left: -4px;
   width: calc(100% + 8px);
   height: calc(100% + 8px);
-  border-radius: 5px;
+  border-radius: 16px;       /* slightly larger than button for smooth outline */
   box-sizing: border-box;
   border: 2px solid transparent;
-  border-image: linear-gradient(90deg, #00aaff, #00ffaa, #00aaff) 1; /* gradient border */
+  border-image: linear-gradient(90deg, #00aaff, #00ffaa, #00aaff) 1;
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.3s;
   z-index: -1;
-  box-shadow: 0 0 8px #00aaff; /* subtle glow */
+  box-shadow: 0 0 8px #00aaff;
   animation: wave 1.5s linear infinite;
 }
 
@@ -74,12 +86,6 @@ nav a:hover::before {
   0% { border-image-slice: 1; border-image-source: linear-gradient(90deg, #00aaff, #00ffaa, #00aaff); }
   50% { border-image-source: linear-gradient(90deg, #00ffaa, #00aaff, #00ffaa); }
   100% { border-image-source: linear-gradient(90deg, #00aaff, #00ffaa, #00aaff); }
-}
-}
-
-@keyframes wave {
-  0% { background-position: 200% 0; }
-  100% { background-position: -200% 0; }
 }
 
 
