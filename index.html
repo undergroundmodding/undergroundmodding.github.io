@@ -32,8 +32,7 @@
       cursor: pointer;
       transition: color 0.3s;
     }
-    header h1:hover { color: #00aaff; }
-    nav a {
+    header h1:hover { color: #00aaff; }nav a {
   position: relative;
   color: #fff;
   margin-left: 25px;
@@ -41,13 +40,13 @@
   font-weight: 500;
   transition: color 0.3s;
   padding: 5px 10px;
+  z-index: 0;
 }
 
 nav a:hover {
   color: #00aaff;
 }
 
-/* Wave outline effect */
 nav a::before {
   content: '';
   position: absolute;
@@ -58,16 +57,24 @@ nav a::before {
   border-radius: 5px;
   box-sizing: border-box;
   border: 2px solid transparent;
-  background: linear-gradient(90deg, #00aaff, #00ffaa, #00aaff);
-  background-size: 200% 200%;
+  border-image: linear-gradient(90deg, #00aaff, #00ffaa, #00aaff) 1; /* gradient border */
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.3s;
+  z-index: -1;
+  box-shadow: 0 0 8px #00aaff; /* subtle glow */
   animation: wave 1.5s linear infinite;
 }
 
 nav a:hover::before {
   opacity: 1;
+}
+
+@keyframes wave {
+  0% { border-image-slice: 1; border-image-source: linear-gradient(90deg, #00aaff, #00ffaa, #00aaff); }
+  50% { border-image-source: linear-gradient(90deg, #00ffaa, #00aaff, #00ffaa); }
+  100% { border-image-source: linear-gradient(90deg, #00aaff, #00ffaa, #00aaff); }
+}
 }
 
 @keyframes wave {
