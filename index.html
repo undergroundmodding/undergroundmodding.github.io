@@ -1,0 +1,82 @@
+<!doctype html>
+</header>
+
+
+<main class="viewport" id="main">
+<div class="card" id="card">
+<h1>Underground Modding</h1>
+<p>Beta — tweaks, experiments, and community modding culture. Use the nav to explore. On click the page will blur to black and the new page fades in with a loading bar at the top.</p>
+<a class="center-btn" id="to-page-2" href="page2.html">Go to page 2</a>
+</div>
+</main>
+
+
+<script>
+/* Navigation + animation helper (works with ordinary links so compatible with GitHub Pages) */
+(function(){
+const overlay = document.getElementById('overlay');
+const topbar = document.getElementById('topbar');
+const links = document.querySelectorAll('a.nav-link, a#to-page-2, a.brand');
+const DURATION = 600; // ms - visually how long until navigation happens
+
+
+function startTransition(href){
+// Start overlay blur-to-black
+overlay.classList.add('entering');
+// animate topbar (simulate loading)
+topbar.style.width = '6%';
+topbar.style.transition = 'none';
+// force a style recalc so the transition will run
+void topbar.offsetWidth;
+topbar.style.transition = 'width 900ms linear';
+topbar.style.width = '86%';
+
+
+// navigate after short delay to allow animation to be visible
+setTimeout(()=>{
+// ensure topbar finishes quickly for a crisp end
+topbar.style.width = '100%';
+
+
+// slight extra delay then go to href
+setTimeout(()=>{
+window.location.href = href;
+}, 160);
+}, DURATION);
+}
+
+
+links.forEach(a=>{
+a.addEventListener('click',(e)=>{
+const href = a.getAttribute('href');
+// allow command/meta clicks to open in new tab
+if(e.metaKey || e.ctrlKey || e.shiftKey || e.button === 1) return;
+e.preventDefault();
+startTransition(href);
+});
+});
+
+
+// In case the user hits a direct link to this page, we'll fade in content gracefully
+document.documentElement.classList.remove('no-js');
+const card = document.getElementById('card');
+card.classList.add('fade-in');
+
+
+// On page load complete (if navigation came from our animation) ensure overlays cleared
+window.addEventListener('pageshow', ()=>{
+overlay.classList.remove('entering');
+topbar.style.width='0%';
+});
+
+
+// Reduced-motion handling: if user prefers reduced motion, skip animations
+const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
+if(mq.matches) {
+overlay.style.transition = 'none';
+topbar.style.transition = 'none';
+}
+})();
+</script>
+</body>
+</html>
