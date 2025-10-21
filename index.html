@@ -5,12 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Underground Modding</title>
   <style>
-    /* --- Base Styles --- */
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
       font-family: 'Poppins', sans-serif;
       background-color: #000;
@@ -18,7 +13,6 @@
       overflow: hidden;
     }
 
-    /* --- Navigation Bar --- */
     header {
       display: flex;
       justify-content: space-between;
@@ -37,9 +31,7 @@
       cursor: pointer;
       transition: color 0.3s;
     }
-    header h1:hover {
-      color: #00aaff;
-    }
+    header h1:hover { color: #00aaff; }
     nav a {
       color: #fff;
       margin-left: 25px;
@@ -47,11 +39,8 @@
       font-weight: 500;
       transition: color 0.3s;
     }
-    nav a:hover {
-      color: #00aaff;
-    }
+    nav a:hover { color: #00aaff; }
 
-    /* --- Main Content --- */
     main {
       height: 100vh;
       display: flex;
@@ -71,12 +60,8 @@
       font-size: 1rem;
       transition: background 0.3s, transform 0.3s;
     }
-    button:hover {
-      background-color: #0088cc;
-      transform: scale(1.05);
-    }
+    button:hover { background-color: #0088cc; transform: scale(1.05); }
 
-    /* --- Overlay for Blur Transition --- */
     #overlay {
       position: fixed;
       top: 0; left: 0;
@@ -92,7 +77,6 @@
       pointer-events: all;
     }
 
-    /* --- Loading Bar --- */
     #loading-bar {
       position: fixed;
       top: 0; left: 0;
@@ -111,9 +95,9 @@
   <header>
     <h1 onclick="navigateTo('index.html')">Underground Modding</h1>
     <nav>
-      <a href="about.html" onclick="smoothNavigate(event, 'about.html')">About</a>
-      <a href="news.html" onclick="smoothNavigate(event, 'news.html')">News</a>
-      <a href="discord.html" onclick="smoothNavigate(event, 'discord.html')">Discord</a>
+      <a href="pages/about.html" onclick="smoothNavigate(event, 'pages/about.html')">About</a>
+      <a href="pages/news.html" onclick="smoothNavigate(event, 'pages/news.html')">News</a>
+      <a href="pages/discord.html" onclick="smoothNavigate(event, 'pages/discord.html')">Discord</a>
     </nav>
   </header>
 
@@ -131,9 +115,7 @@
       event.preventDefault();
       overlay.classList.add('active');
       loadingBar.style.width = '100%';
-      setTimeout(() => {
-        window.location.href = url;
-      }, 600);
+      setTimeout(() => { window.location.href = url; }, 600);
     }
 
     function navigateTo(url) {
@@ -145,11 +127,10 @@
       content.style.filter = 'blur(20px)';
       content.style.opacity = '0';
       setTimeout(() => {
-        window.location.href = 'page2.html';
+        window.location.href = 'pages/page2.html';
       }, 600);
     }
 
-    // Reset states when page loads
     window.addEventListener('load', () => {
       overlay.classList.remove('active');
       loadingBar.style.width = '0%';
