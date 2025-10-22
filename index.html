@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Underground Modding</title>
@@ -20,8 +19,7 @@
       align-items: center;
       padding: 20px 40px;
       position: fixed;
-      top: 0;
-      left: 0;
+      top: 0; left: 0;
       width: 100%;
       background: rgba(0, 0, 0, 0.8);
       z-index: 10;
@@ -32,62 +30,46 @@
       cursor: pointer;
       transition: color 0.3s;
     }
-    header h1:hover { color: #00aaff; }nav a {
-  position: relative;
-  color: #fff;
-  margin-left: 25px;
-  text-decoration: none;
-  font-weight: 500;
-  transition: color 0.3s;
-  padding: 5px 10px;
-  z-index: 0;
-}
+    header h1:hover { color: #00aaff; }
 
-nav a {
-  position: relative;
-  color: #fff;
-  margin-left: 25px;
-  text-decoration: none;
-  font-weight: 500;
-  transition: color 0.3s;
-  padding: 8px 15px;      /* button padding */
-  border-radius: 8px;     /* slightly curved button corners */
-  z-index: 0;
-}
+    nav a {
+      position: relative;
+      color: #fff;
+      margin-left: 25px;
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.3s;
+      padding: 8px 15px;
+      border-radius: 8px;
+      z-index: 0;
+    }
+    nav a:hover { color: #00aaff; }
 
-nav a:hover {
-  color: #00aaff;
-}
+    /* Wave outline */
+    nav a::before {
+      content: '';
+      position: absolute;
+      top: -4px; left: -4px;
+      width: calc(100% + 8px);
+      height: calc(100% + 8px);
+      border-radius: 10px;
+      box-sizing: border-box;
+      border: 2px solid transparent;
+      border-image: linear-gradient(90deg, #00aaff, #00ffaa, #00aaff) 1;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s;
+      z-index: -1;
+      box-shadow: 0 0 8px #00aaff;
+      animation: wave 1.5s linear infinite;
+    }
+    nav a:hover::before { opacity: 1; }
 
-/* Wave outline */
-nav a::before {
-  content: '';
-  position: absolute;
-  top: -4px;
-  left: -4px;
-  width: calc(100% + 8px);
-  height: calc(100% + 8px);
-  border-radius: 10px;     /* curved square corners for outline */
-  box-sizing: border-box;
-  border: 2px solid transparent;
-  border-image: linear-gradient(90deg, #00aaff, #00ffaa, #00aaff) 1;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.3s;
-  z-index: -1;
-  box-shadow: 0 0 8px #00aaff;
-  animation: wave 1.5s linear infinite;
-}
-
-nav a:hover::before {
-  opacity: 1;
-}
-
-@keyframes wave {
-  0% { border-image-slice: 1; border-image-source: linear-gradient(90deg, #00aaff, #00ffaa, #00aaff); }
-  50% { border-image-source: linear-gradient(90deg, #00ffaa, #00aaff, #00ffaa); }
-  100% { border-image-source: linear-gradient(90deg, #00aaff, #00ffaa, #00aaff); }
-}
+    @keyframes wave {
+      0% { border-image-source: linear-gradient(90deg, #00aaff, #00ffaa, #00aaff); }
+      50% { border-image-source: linear-gradient(90deg, #00ffaa, #00aaff, #00ffaa); }
+      100% { border-image-source: linear-gradient(90deg, #00aaff, #00ffaa, #00aaff); }
+    }
 
     main {
       height: 100vh;
@@ -98,17 +80,35 @@ nav a:hover::before {
       text-align: center;
       transition: opacity 0.6s ease, filter 0.6s ease;
     }
+
     button {
       background-color: #00aaff;
       color: white;
       border: none;
       padding: 15px 30px;
       border-radius: 10px;
+      font-size: 1.2rem;
       cursor: pointer;
-      font-size: 1rem;
-      transition: background 0.3s, transform 0.3s;
+      transition: transform 0.3s, box-shadow 0.3s;
     }
-    button:hover { background-color: #0088cc; transform: scale(1.05); }
+    button:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 15px #00aaff;
+    }
+
+    footer {
+      position: fixed;
+      bottom: 0; left: 0;
+      width: 100%;
+      background: #111;
+      padding: 10px 0;
+      text-align: center;
+      border-top: 1px solid #222;
+      color: #888;
+      font-size: 0.9rem;
+      letter-spacing: 0.4px;
+      z-index: 5;
+    }
 
     #overlay {
       position: fixed;
@@ -120,10 +120,7 @@ nav a:hover::before {
       transition: opacity 0.6s ease;
       z-index: 9;
     }
-    #overlay.active {
-      opacity: 1;
-      pointer-events: all;
-    }
+    #overlay.active { opacity: 1; pointer-events: all; }
 
     #loading-bar {
       position: fixed;
@@ -137,30 +134,6 @@ nav a:hover::before {
   </style>
 </head>
 <body>
-  <footer>
-    <p>We are not affiliated or associated with anyone. This is an open-source project.</p>
-  </footer>
-
-  <style>
-    footer {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      width: 100%;
-      background: #111; /* Dark grey tone */
-      padding: 10px 0;
-      text-align: center;
-      border-top: 1px solid #222;
-      color: #888;
-      font-size: 0.9rem;
-      letter-spacing: 0.4px;
-      z-index: 5;
-    }
-    footer p {
-      margin: 0;
-    }
-  </style>
-
   <div id="loading-bar"></div>
   <div id="overlay"></div>
 
@@ -175,9 +148,13 @@ nav a:hover::before {
 
   <main id="content">
     <h2>Welcome to Underground Modding</h2>
-    <p style="margin:20px 0;">This is pretty much just a test site at the moment. More Coming soon :)</p>
-    <button onclick="slideToPage()">Next Page →</button>
+    <p>Home of open-source creativity.</p>
+    <button onclick="smoothNavigate(event, 'pages/second.html')">Enter</button>
   </main>
+
+  <footer>
+    <p>We are not affiliated or associated with anyone. This is an open-source project.</p>
+  </footer>
 
   <script>
     const overlay = document.getElementById('overlay');
@@ -189,27 +166,13 @@ nav a:hover::before {
       loadingBar.style.width = '100%';
       setTimeout(() => { window.location.href = url; }, 600);
     }
-
-    function navigateTo(url) {
-      window.location.href = url;
-    }
-
-    function slideToPage() {
-      const content = document.getElementById('content');
-      content.style.filter = 'blur(20px)';
-      content.style.opacity = '0';
-      setTimeout(() => {
-        window.location.href = 'pages/page2.html';
-      }, 600);
-    }
+    function navigateTo(url) { window.location.href = url; }
 
     window.addEventListener('load', () => {
       overlay.classList.remove('active');
       loadingBar.style.width = '0%';
-      const content = document.getElementById('content');
-      content.style.opacity = '1';
-      content.style.filter = 'blur(0px)';
     });
   </script>
 </body>
 </html>
+
