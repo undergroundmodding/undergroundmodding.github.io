@@ -1,13 +1,68 @@
-<<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Second Page - Underground Modding</title>
+  <title>Beta Test - Underground Modding</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body { font-family: 'Poppins', sans-serif; background-color: #000; color: #fff; overflow: hidden; }
-    header, nav a, footer, #overlay, #loading-bar { all: unset; }
+
+    header {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 20px 40px; position: fixed; top: 0; left: 0; width: 100%;
+      background: rgba(0, 0, 0, 0.8); z-index: 10;
+    }
+    header h1 { font-size: 1.8rem; color: #fff; cursor: pointer; transition: color 0.3s; }
+    header h1:hover { color: #00aaff; }
+
+    nav a {
+      position: relative; color: #fff; margin-left: 25px; text-decoration: none;
+      font-weight: 500; transition: color 0.3s; padding: 8px 15px;
+      border-radius: 8px; z-index: 0;
+    }
+    nav a:hover { color: #00aaff; }
+    nav a::before {
+      content: ''; position: absolute; top: -4px; left: -4px;
+      width: calc(100% + 8px); height: calc(100% + 8px);
+      border-radius: 10px; box-sizing: border-box; border: 2px solid transparent;
+      border-image: linear-gradient(90deg, #00aaff, #00ffaa, #00aaff) 1;
+      opacity: 0; pointer-events: none; transition: opacity 0.3s;
+      z-index: -1; box-shadow: 0 0 8px #00aaff; animation: wave 1.5s linear infinite;
+    }
+    nav a:hover::before { opacity: 1; }
+
+    @keyframes wave {
+      0% { border-image-source: linear-gradient(90deg, #00aaff, #00ffaa, #00aaff); }
+      50% { border-image-source: linear-gradient(90deg, #00ffaa, #00aaff, #00ffaa); }
+      100% { border-image-source: linear-gradient(90deg, #00aaff, #00ffaa, #00aaff); }
+    }
+
+    main {
+      height: 100vh; display: flex; flex-direction: column;
+      justify-content: center; align-items: center; text-align: center;
+      transition: opacity 0.6s ease, filter 0.6s ease;
+    }
+    h2 { color: #00aaff; margin-bottom: 15px; }
+    p { color: #aaa; font-size: 1.1rem; }
+
+    footer {
+      position: fixed; bottom: 0; left: 0; width: 100%; background: #111;
+      padding: 10px 0; text-align: center; border-top: 1px solid #222;
+      color: #888; font-size: 0.9rem; letter-spacing: 0.4px; z-index: 5;
+    }
+
+    #overlay {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: black; opacity: 0; pointer-events: none;
+      transition: opacity 0.6s ease; z-index: 9;
+    }
+    #overlay.active { opacity: 1; pointer-events: all; }
+
+    #loading-bar {
+      position: fixed; top: 0; left: 0; height: 3px; width: 0%;
+      background: #00aaff; transition: width 0.4s ease; z-index: 11;
+    }
   </style>
 </head>
 <body>
@@ -31,6 +86,21 @@
   <footer>
     <p>We are not affiliated or associated with anyone. This is an open-source project.</p>
   </footer>
+
+  <script>
+    const overlay = document.getElementById('overlay');
+    const loadingBar = document.getElementById('loading-bar');
+    function smoothNavigate(event, url) {
+      event.preventDefault();
+      overlay.classList.add('active');
+      loadingBar.style.width = '100%';
+      setTimeout(() => { window.location.href = url; }, 600);
+    }
+    function navigateTo(url) { window.location.href = url; }
+    window.addEventListener('load', () => {
+      overlay.classList.remove('active');
+      loadingBar.style.width = '0%';
+    });
+  </script>
 </body>
 </html>
-
