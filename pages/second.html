@@ -1,0 +1,36 @@
+<<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Second Page - Underground Modding</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Poppins', sans-serif; background-color: #000; color: #fff; overflow: hidden; }
+    header, nav a, footer, #overlay, #loading-bar { all: unset; }
+  </style>
+</head>
+<body>
+  <div id="loading-bar"></div>
+  <div id="overlay"></div>
+
+  <header>
+    <h1 onclick="navigateTo('../index.html')">Underground Modding</h1>
+    <nav>
+      <a href="about.html" onclick="smoothNavigate(event, 'about.html')">About</a>
+      <a href="news.html" onclick="smoothNavigate(event, 'news.html')">News</a>
+      <a href="discord.html" onclick="smoothNavigate(event, 'discord.html')">Discord</a>
+    </nav>
+  </header>
+
+  <main>
+    <h2>Beta Test Page</h2>
+    <p>This is the second test page. Everything’s running smoothly!</p>
+  </main>
+
+  <footer>
+    <p>We are not affiliated or associated with anyone. This is an open-source project.</p>
+  </footer>
+</body>
+</html>
+
