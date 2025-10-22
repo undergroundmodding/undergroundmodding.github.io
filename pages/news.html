@@ -69,26 +69,70 @@
       grid-template-columns:repeat(auto-fill,minmax(220px,1fr));
       gap:18px;
     }
+/* Card base */
+.card{
+  background:#0f0f10;
+  border-radius:12px;
+  padding:14px;
+  min-height:110px;
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+  cursor:pointer;
+  transition:transform .18s ease,box-shadow .18s ease,background .18s;
+  position:relative;
+  z-index:1;           /* ensure card content sits above the outline */
+  overflow:visible;    /* allow outline to sit outside the card */
+}
 
-    .card{
-      background:#0f0f10;border-radius:12px;padding:14px;min-height:110px;display:flex;flex-direction:column;
-      gap:8px;cursor:pointer;transition:transform .18s ease,box-shadow .18s ease,background .18s;
-      position:relative;overflow:hidden;
-    }
-    .card:hover{transform:translateY(-6px);box-shadow:0 12px 30px rgba(0,0,0,0.6)}
-    .card .title{font-weight:700;color:#e6eef6;font-size:15px}
-    .card .meta{font-size:12px;color:#8f98a2}
-    .card .excerpt{
-      color:#c8cdd2;font-size:13px;line-height:1.35;
-      display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;text-overflow:ellipsis;
-    }
+/* Hover lift/shadow */
+.card:hover{
+  transform:translateY(-6px);
+  box-shadow:0 12px 30px rgba(0,0,0,0.6);
+}
 
-    /* Put the wave-outline effect on the right corner of each card (small) */
-    .card::after{
-      content:'';position:absolute;right:12px;bottom:12px;width:36px;height:20px;border-radius:6px;pointer-events:none;
-      box-shadow:0 0 8px rgba(10,160,255,0.08);opacity:0;transition:opacity .18s;
-      border:2px solid transparent;border-image:linear-gradient(90deg,#00aaff,#00ffaa,#00aaff) 1;background:transparent;
-    }
+/* Title/meta/excerpt remain the same */
+.card .title{font-weight:700;color:#e6eef6;font-size:15px}
+.card .meta{font-size:12px;color:#8f98a2}
+.card .excerpt{
+  color:#c8cdd2;font-size:13px;line-height:1.35;
+  display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;
+  overflow:hidden;text-overflow:ellipsis;
+}
+
+/* OUTLINE: use ::before so it can be sized exactly around the card.
+   inset:-6px makes the outline sit outside the card by 6px; adjust if you want it tighter/looser.
+*/
+.card::before{
+  content: '';
+  position: absolute;
+  inset: -6px;                 /* places the outline slightly outside the card */
+  border-radius: 16px;         /* slightly larger than card radius so corners match smoothly */
+  box-sizing: border-box;
+  border: 2px solid transparent;
+  border-image: linear-gradient(90deg, #00aaff, #00ffaa, #00aaff) 1;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .28s ease, box-shadow .28s ease, transform .28s ease;
+  z-index: 0;                  /* behind the card content (card is z-index:1) */
+  box-shadow: 0 8px 24px rgba(10,160,255,0.06); /* soft glow */
+  /* keep the same wave animation */
+  animation: wave 1.6s linear infinite;
+}
+
+/* show the outline on hover */
+.card:hover::before{
+  opacity: 1;
+  box-shadow: 0 12px 36px rgba(10,160,255,0.12);
+}
+
+/* keep keyframes for the wave gradient */
+@keyframes wave{
+  0% { border-image-source: linear-gradient(90deg,#00aaff,#00ffaa,#00aaff); }
+  50% { border-image-source: linear-gradient(90deg,#00ffaa,#00aaff,#00ffaa); }
+  100% { border-image-source: linear-gradient(90deg,#00aaff,#00ffaa,#00aaff); }
+}
+}
     .card:hover::after{opacity:1;box-shadow:0 10px 30px rgba(10,160,255,0.12)}
 
     /* small label under toolbar to show count */
