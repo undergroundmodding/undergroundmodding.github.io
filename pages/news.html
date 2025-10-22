@@ -1,82 +1,147 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>News - Underground Modding</title>
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: 'Poppins', sans-serif; background-color: #000; color: #fff; overflow: hidden; }
-
-    header {
-      display: flex; justify-content: space-between; align-items: center;
-      padding: 20px 40px; position: fixed; top: 0; left: 0; width: 100%;
-      background: rgba(0, 0, 0, 0.8); z-index: 10;
-    }
-    header h1 { font-size: 1.8rem; color: #fff; cursor: pointer; transition: color 0.3s; }
-    header h1:hover { color: #00aaff; }
-
-    nav a {
-      position: relative; color: #fff; margin-left: 25px; text-decoration: none;
-      font-weight: 500; transition: color 0.3s; padding: 8px 15px;
-      border-radius: 8px; z-index: 0;
-    }
-    nav a:hover { color: #00aaff; }
-    nav a::before {
-      content: ''; position: absolute; top: -4px; left: -4px;
-      width: calc(100% + 8px); height: calc(100% + 8px);
-      border-radius: 10px; box-sizing: border-box; border: 2px solid transparent;
-      border-image: linear-gradient(90deg, #00aaff, #00ffaa, #00aaff) 1;
-      opacity: 0; pointer-events: none; transition: opacity 0.3s;
-      z-index: -1; box-shadow: 0 0 8px #00aaff; animation: wave 1.5s linear infinite;
-    }
-    nav a:hover::before { opacity: 1; }
-    @keyframes wave {
-      0% { border-image-source: linear-gradient(90deg, #00aaff, #00ffaa, #00aaff); }
-      50% { border-image-source: linear-gradient(90deg, #00ffaa, #00aaff, #00ffaa); }
-      100% { border-image-source: linear-gradient(90deg, #00aaff, #00ffaa, #00aaff); }
+    /* Basic reset + page shell */
+    *{box-sizing:border-box;margin:0;padding:0}
+    html,body{height:100%}
+    body{
+      background:#000;
+      color:#fff;
+      font-family: 'Poppins', system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      overflow-x:hidden;
     }
 
-    main {
-      height: 100vh; display: flex; justify-content: center;
-      align-items: center; flex-direction: column; text-align: center;
+    /* Top chrome (loading bar / overlay) */
+    #loading-bar{position:fixed;top:0;left:0;height:3px;width:0;background:#00aaff;z-index:120;transition:width 360ms linear}
+    #overlay{position:fixed;inset:0;background:#000000;opacity:0;pointer-events:none;z-index:110;transition:opacity 420ms ease}
+    #overlay.active{opacity:0.88;pointer-events:auto}
+
+    /* Header */
+    header{
+      position:fixed;top:0;left:0;right:0;height:72px;display:flex;align-items:center;
+      justify-content:space-between;padding:18px 28px;background:rgba(0,0,0,0.8);z-index:100;
     }
-    h2 { color: #00aaff; margin-bottom: 10px; }
-    p { color: #aaa; font-size: 1.1rem; }
+    .brand{font-weight:700;cursor:pointer;color:var(--fg,#e6eef6);text-decoration:none}
+    nav{display:flex;align-items:center;gap:10px}
+    nav a{
+      position:relative;color:#fff;text-decoration:none;padding:8px 14px;border-radius:8px;font-weight:500;
+      transition:color .18s;
+      z-index:0;
+    }
+    nav a:hover{color:#00aaff}
 
-    footer {
-      position: fixed; bottom: 0; left: 0; width: 100%; background: #111;
-      padding: 10px 0; text-align: center; border-top: 1px solid #222;
-      color: #888; font-size: 0.9rem; letter-spacing: 0.4px; z-index: 5;
+    /* Wave outline for nav and for cards (reusable) */
+    .wave-outline::before{
+      content:'';position:absolute;top:-4px;left:-4px;width:calc(100% + 8px);height:calc(100% + 8px);
+      border-radius:10px;box-sizing:border-box;border:2px solid transparent;
+      border-image:linear-gradient(90deg,#00aaff,#00ffaa,#00aaff) 1;opacity:0;pointer-events:none;
+      transition:opacity .28s;z-index:-1;box-shadow:0 0 10px rgba(10,160,255,0.12);animation:wave 1.6s linear infinite;
+    }
+    .wave-outline:hover::before{opacity:1}
+    @keyframes wave{
+      0%{border-image-source:linear-gradient(90deg,#00aaff,#00ffaa,#00aaff)}
+      50%{border-image-source:linear-gradient(90deg,#00ffaa,#00aaff,#00ffaa)}
+      100%{border-image-source:linear-gradient(90deg,#00aaff,#00ffaa,#00aaff)}
     }
 
-    #overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-      background: black; opacity: 0; pointer-events: none;
-      transition: opacity 0.6s ease; z-index: 9; }
-    #overlay.active { opacity: 1; pointer-events: all; }
+    /* Page content area */
+    main{padding:96px 28px 88px;min-height:100vh}
+    .container{max-width:1200px;margin:0 auto}
 
-    #loading-bar {
-      position: fixed; top: 0; left: 0; height: 3px; width: 0%;
-      background: #00aaff; transition: width 0.4s ease; z-index: 11;
+    /* Toolbar: title + sort dropdown */
+    .toolbar{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:20px}
+    .page-title{font-size:20px;font-weight:700;color:#e6eef6}
+    .controls{display:flex;align-items:center;gap:10px}
+    .select{
+      background:#0b0b0b;border:1px solid #222;padding:8px 10px;border-radius:8px;color:#ddd;font-size:14px;
+      outline:none;
+    }
+
+    /* Grid of cards (like speed-dial) */
+    .grid{
+      display:grid;
+      grid-template-columns:repeat(auto-fill,minmax(220px,1fr));
+      gap:18px;
+    }
+
+    .card{
+      background:#0f0f10;border-radius:12px;padding:14px;min-height:110px;display:flex;flex-direction:column;
+      gap:8px;cursor:pointer;transition:transform .18s ease,box-shadow .18s ease,background .18s;
+      position:relative;overflow:hidden;
+    }
+    .card:hover{transform:translateY(-6px);box-shadow:0 12px 30px rgba(0,0,0,0.6)}
+    .card .title{font-weight:700;color:#e6eef6;font-size:15px}
+    .card .meta{font-size:12px;color:#8f98a2}
+    .card .excerpt{
+      color:#c8cdd2;font-size:13px;line-height:1.35;
+      display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;text-overflow:ellipsis;
+    }
+
+    /* Put the wave-outline effect on the right corner of each card (small) */
+    .card::after{
+      content:'';position:absolute;right:12px;bottom:12px;width:36px;height:20px;border-radius:6px;pointer-events:none;
+      box-shadow:0 0 8px rgba(10,160,255,0.08);opacity:0;transition:opacity .18s;
+      border:2px solid transparent;border-image:linear-gradient(90deg,#00aaff,#00ffaa,#00aaff) 1;background:transparent;
+    }
+    .card:hover::after{opacity:1;box-shadow:0 10px 30px rgba(10,160,255,0.12)}
+
+    /* small label under toolbar to show count */
+    .info{color:#9aa3ad;font-size:13px;margin-top:8px}
+
+    /* Footer */
+    footer{
+      position:fixed;left:0;right:0;bottom:0;background:#111;padding:10px 0;text-align:center;border-top:1px solid #222;color:#888;font-size:0.9rem;z-index:50
+    }
+
+    /* Responsive tweaks */
+    @media (max-width:720px){
+      header{padding:14px}
+      .toolbar{flex-direction:column;align-items:flex-start;gap:8px}
+      .grid{gap:12px}
+      .card{padding:12px}
+      .container{padding:0 6px}
     }
   </style>
 </head>
 <body>
-  <div id="loading-bar"></div>
-  <div id="overlay"></div>
+  <div id="loading-bar" aria-hidden="true"></div>
+  <div id="overlay" aria-hidden="true"></div>
 
   <header>
-    <h1 onclick="navigateTo('../index.html')">Underground Modding</h1>
+    <a class="brand" href="../index.html">Underground Modding</a>
     <nav>
-      <a href="about.html" onclick="smoothNavigate(event, 'about.html')">About</a>
-      <a href="news.html" onclick="smoothNavigate(event, 'news.html')">News</a>
-      <a href="discord.html" onclick="smoothNavigate(event, 'discord.html')">Discord</a>
+      <a class="wave-outline" href="about.html" onclick="navClick(event,'about.html')">About</a>
+      <a class="wave-outline" href="news.html" onclick="navClick(event,'news.html')">News</a>
+      <a class="wave-outline" href="discord.html" onclick="navClick(event,'discord.html')">Discord</a>
     </nav>
   </header>
 
   <main>
-    <h2>News</h2>
-    <p>Coming soon...</p>
+    <div class="container">
+      <div class="toolbar" role="region" aria-label="News controls">
+        <div>
+          <div class="page-title">News</div>
+          <div class="info" id="countText">Loading posts…</div>
+        </div>
+
+        <div class="controls">
+          <label for="sort" style="color:#9aa3ad;font-size:13px;margin-right:6px">Sort</label>
+          <select id="sort" class="select" aria-label="Sort news">
+            <option value="new">Newest → Oldest</option>
+            <option value="old">Oldest → Newest</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- grid of cards -->
+      <div class="grid" id="grid" aria-live="polite"></div>
+    </div>
   </main>
 
   <footer>
@@ -84,20 +149,136 @@
   </footer>
 
   <script>
+    // helper UI elements
     const overlay = document.getElementById('overlay');
     const loadingBar = document.getElementById('loading-bar');
-    function smoothNavigate(event, url) {
-      event.preventDefault();
+    const grid = document.getElementById('grid');
+    const countText = document.getElementById('countText');
+    const sortSelect = document.getElementById('sort');
+
+    // Where news live (on your repo root). We'll fetch /news/index.json
+    const MANIFEST = '/news/index.json';
+
+    // Start loading animation
+    function startLoading(){
+      overlay.classList.add('active');
+      loadingBar.style.width = '36%';
+      // progress to mid
+      setTimeout(()=> loadingBar.style.width = '76%', 180);
+    }
+    function finishLoading(){
+      loadingBar.style.width = '100%';
+      setTimeout(()=> { loadingBar.style.width = '0%'; overlay.classList.remove('active') }, 240);
+    }
+
+    // Create a card DOM node
+    function createCard(item){
+      const a = document.createElement('a');
+      a.className = 'card wave-outline';
+      a.href = item.url; // e.g. /news/welcome.html
+      a.setAttribute('role','article');
+      a.setAttribute('aria-label', item.title);
+      a.onclick = (e) => {
+        // allow cmd/ctrl to open new tab
+        if(e.metaKey || e.ctrlKey || e.shiftKey || e.button === 1) return;
+        e.preventDefault();
+        navigateWithTransition(item.url);
+      };
+
+      const title = document.createElement('div'); title.className = 'title'; title.textContent = item.title;
+      const meta = document.createElement('div'); meta.className = 'meta'; meta.textContent = new Date(item.date).toLocaleDateString();
+      const ex = document.createElement('div'); ex.className = 'excerpt'; ex.textContent = item.excerpt;
+
+      a.appendChild(title);
+      a.appendChild(meta);
+      a.appendChild(ex);
+      return a;
+    }
+
+    // Render list into grid
+    function renderList(list){
+      grid.innerHTML = '';
+      if(!list.length){
+        countText.textContent = 'No posts yet.';
+        const empty = document.createElement('div'); empty.style.color = '#8b949a'; empty.textContent = 'No news posts available.';
+        grid.appendChild(empty);
+        return;
+      }
+      countText.textContent = `${list.length} post${list.length>1?'s':''}`;
+      list.forEach(item=>{
+        grid.appendChild(createCard(item));
+      });
+    }
+
+    // navigation with blur-overlay + loading bar transition
+    function navigateWithTransition(href){
       overlay.classList.add('active');
       loadingBar.style.width = '100%';
-      setTimeout(() => { window.location.href = url; }, 600);
+      setTimeout(()=> window.location.href = href, 520);
     }
-    function navigateTo(url) { window.location.href = url; }
-    window.addEventListener('load', () => {
-      overlay.classList.remove('active');
-      loadingBar.style.width = '0%';
+
+    // handle top nav clicks (same transition)
+    function navClick(e,href){
+      e.preventDefault();
+      navigateWithTransition(href);
+    }
+
+    // Sort helpers
+    function sortItems(items, mode){
+      return items.slice().sort((a,b)=>{
+        const da = new Date(a.date).getTime();
+        const db = new Date(b.date).getTime();
+        return mode === 'new' ? (db - da) : (da - db);
+      });
+    }
+
+    // Try to fetch manifest and render. If it fails (404), show fallback Welcome card
+    async function loadPosts(){
+      startLoading();
+      try{
+        const res = await fetch(MANIFEST, {cache: 'no-store'});
+        if(!res.ok) throw new Error('no manifest');
+        const json = await res.json();
+        // json expected to be array of items { title, date, excerpt, url }
+        let items = Array.isArray(json) ? json : [];
+        // default sort = new
+        items = sortItems(items, sortSelect.value);
+        renderList(items);
+      }catch(err){
+        // fallback single welcome post
+        const welcome = [{
+          title: 'Welcome',
+          date: (new Date()).toISOString(),
+          excerpt: 'Welcome to Underground Modding — this is the news index. Click to read more and keep an eye on this space for updates...',
+          url: '/news/welcome.html'
+        }];
+        renderList(welcome);
+      } finally {
+        finishLoading();
+      }
+    }
+
+    // React to sort change
+    sortSelect.addEventListener('change', ()=>{
+      const current = Array.from(grid.children).map(node=>{
+        return {
+          title: node.querySelector('.title')?.textContent || '',
+          date: node.querySelector('.meta')?.textContent || '',
+          excerpt: node.querySelector('.excerpt')?.textContent || '',
+          url: node.href
+        };
+      });
+      // current dates are localized strings; easier to reload from manifest
+      loadPosts();
+    });
+
+    // Initial load
+    loadPosts();
+
+    // Accessibility: keyboard navigation for cards
+    document.addEventListener('keydown', (e)=>{
+      if(e.key === 'Escape') overlay.classList.remove('active');
     });
   </script>
 </body>
 </html>
-
